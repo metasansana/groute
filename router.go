@@ -19,55 +19,68 @@ type Router struct {
 	routes list
 }
 
+//func (r *Router) Regex(regex string, http.Handler) Route{
+
+//  return selfegexRoute{
+
+//}
+
+//Static is a factory method for static route support.
+func (self *Router) Static(path string, callback Callback) Route {
+
+	return &StaticRoute{path, callback}
+
+}
+
 //Get adds a GET route
-func (r Router) Get(route Route) Router {
+func (self *Router) Get(route Route) *Router {
 
-	r.routes[get] = append(r.routes["GET"], route)
+	self.routes[get] = append(self.routes["GET"], route)
 
-	return r
+	return self
 
 }
 
 //Put adds a PUT route
-func (r Router) Put(route Route) Router {
+func (self *Router) Put(route Route) *Router {
 
-	r.routes[put] = append(r.routes[put], route)
+	self.routes[put] = append(self.routes[put], route)
 
-	return r
+	return self
 
 }
 
 //Post adds a POST route
-func (r Router) Post(route Route) Router {
+func (self *Router) Post(route Route) *Router {
 
-	r.routes[post] = append(r.routes[post], route)
+	self.routes[post] = append(self.routes[post], route)
 
-	return r
+	return self
 
 }
 
 //Delete adds a DELETE route.
-func (r Router) Delete(route Route) Router {
+func (self *Router) Delete(route Route) *Router {
 
-	r.routes[del] = append(r.routes[del], route)
+	self.routes[del] = append(self.routes[del], route)
 
-	return r
+	return self
 
 }
 
 //Head adds a HEAD route.
-func (r Router) Head(route Route) Router {
+func (self *Router) Head(route Route) *Router {
 
-	r.routes[head] = append(r.routes[head], route)
+	self.routes[head] = append(self.routes[head], route)
 
-	return r
+	return self
 
 }
 
 //ServeHTTP implements the interface from http.Hanlder. 
-func (r Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+func (self *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
-	for _, aRoute := range r.routes[req.Method] {
+	for _, aRoute := range self.routes[req.Method] {
 
 		if result := aRoute.Trigger(req.URL.Path, res, req); result {
 
@@ -79,8 +92,8 @@ func (r Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 }
 
-//NewRouter constructs a new Router object.
-func NewRouter() *Router {
+//Router constructs a new Router object.
+func MakeRouter() *Router {
 
 	routes := make(list)
 	routes["GET"] = make([]Route, 0)
