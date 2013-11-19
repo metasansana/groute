@@ -1,6 +1,7 @@
 package groute
 
 import (
+	"fmt"
 	"net/http"
 	"regexp"
 )
@@ -22,8 +23,14 @@ type RegexRoute struct {
 //Trigger implements the method from the Route interface.
 func (self *RegexRoute) Trigger(route string, w http.ResponseWriter, r *http.Request) bool {
 
-	return false
+	if params := self.path.FindStringSubmatch(route); len(params) > 0 {
 
+		self.action(w, r)
+
+		return true
+
+	}
+	return false
 }
 
 //StaticRoute provides static routing support.

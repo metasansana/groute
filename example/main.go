@@ -20,7 +20,12 @@ func main() {
 		Post(router.Static("/static/post", handler)).
 		Put(router.Static("/static/put", handler)).
 		Head(router.Static("/static/head", handler)).
-		Delete(router.Static("/static/delete", handler))
+		Delete(router.Static("/static/delete", handler)).
+		Get(router.Regex("/regex/[a-zA-Z0-9]+", handler)).
+		Post(router.Regex("/regex/[a-zA-Z0-9]+", handler)).
+		Put(router.Regex("/regex/[a-zA-Z0-9]+", handler)).
+		Head(router.Regex("/regex/[a-zA-Z0-9]+", handler)).
+		Delete(router.Regex("/regex/[a-zA-Z0-9]+", handler))
 
 	http.ListenAndServe(":8080", router)
 
