@@ -2,6 +2,7 @@ package groute
 
 import (
 	"net/http"
+	"regexp"
 )
 
 const (
@@ -19,11 +20,12 @@ type Router struct {
 	routes list
 }
 
-//func (r *Router) Regex(regex string, http.Handler) Route{
+//Regex is a factory method for regex route support.
+func (r *Router) Regex(regex string, callback Callback) Route {
 
-//  return selfegexRoute{
+	return &RegexRoute{regexp.MustCompile(regex), callback}
 
-//}
+}
 
 //Static is a factory method for static route support.
 func (self *Router) Static(path string, callback Callback) Route {
@@ -92,7 +94,7 @@ func (self *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 }
 
-//Router constructs a new Router object.
+//MakeRouter constructs a new Router object.
 func MakeRouter() *Router {
 
 	routes := make(list)
