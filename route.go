@@ -1,13 +1,12 @@
 package groute
 
 import (
-	"fmt"
 	"net/http"
 	"regexp"
 )
 
 //Callback coresponds to Callback's signature
-type Callback func(w http.ResponseWriter, r *http.Request)
+type Callback func(w http.ResponseWriter, r *Request)
 
 //Route is an inteface used to setup routing.
 type Route interface {
@@ -25,7 +24,7 @@ func (self *RegexRoute) Trigger(route string, w http.ResponseWriter, r *http.Req
 
 	if params := self.path.FindStringSubmatch(route); len(params) > 0 {
 
-		self.action(w, r)
+		self.action(w, newRequest(r, params))
 
 		return true
 
@@ -44,7 +43,7 @@ func (self *StaticRoute) Trigger(route string, w http.ResponseWriter, r *http.Re
 
 	if self.path == route {
 
-		self.action(w, r)
+		self.action(w, newRequest(r, make([]string, 0)))
 
 		return true
 
