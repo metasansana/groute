@@ -6,9 +6,10 @@ import (
 	"net/http"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
+func handler(w http.ResponseWriter, r *groute.Request) {
 
-	fmt.Printf("[%s] request detected on path %s.", r.Method, r.URL.Path)
+	fmt.Printf("[%s] request detected on path %s.\n", r.Method, r.URL.Path)
+	fmt.Printf("Printing Submatches: %v\n", r.SUBMATCHES)
 
 }
 
@@ -25,7 +26,7 @@ func main() {
 		Post(router.Regex("/regex/[a-zA-Z0-9]+", handler)).
 		Put(router.Regex("/regex/[a-zA-Z0-9]+", handler)).
 		Head(router.Regex("/regex/[a-zA-Z0-9]+", handler)).
-		Delete(router.Regex("/regex/[a-zA-Z0-9]+", handler))
+		Delete(router.Regex("/regex/([a-zA-Z0-9])+", handler))
 
 	http.ListenAndServe(":8080", router)
 
