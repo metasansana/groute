@@ -1,0 +1,6 @@
+groute
+======
+
+Simple web router written in go.
+
+See the example folder for how to use.

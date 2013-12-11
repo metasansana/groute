@@ -2,7 +2,6 @@ package groute
 
 import (
 	"net/http"
-	"regexp"
 )
 
 const (
@@ -23,15 +22,13 @@ type Router struct {
 //Regex is a factory method for regex route support.
 func (r *Router) Regex(regex string, callback Callback) Route {
 
-	return &RegexRoute{regexp.MustCompile(regex), callback}
-
+	return NewRegexRoute(regex, callback)
 }
 
 //Static is a factory method for static route support.
 func (self *Router) Static(path string, callback Callback) Route {
 
-	return &StaticRoute{path, callback}
-
+	return NewStaticRoute(path, callback)
 }
 
 //Get adds a GET route
@@ -79,7 +76,7 @@ func (self *Router) Head(route Route) *Router {
 
 }
 
-//ServeHTTP implements the interface from http.Hanlder. 
+//ServeHTTP implements the interface from http.Hanlder.
 func (self *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 	for _, aRoute := range self.routes[req.Method] {
@@ -94,8 +91,8 @@ func (self *Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 }
 
-//MakeRouter constructs a new Router object.
-func MakeRouter() *Router {
+//NewRouter constructs a new Router object.
+func NewRouter() *Router {
 
 	routes := make(list)
 	routes["GET"] = make([]Route, 0)
