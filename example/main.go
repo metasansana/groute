@@ -15,7 +15,7 @@ func handler(w http.ResponseWriter, r *groute.Request) {
 
 func main() {
 
-	router := groute.MakeRouter()
+	router := groute.NewRouter()
 
 	router.Get(router.Static("/static/get", handler)).
 		Post(router.Static("/static/post", handler)).
